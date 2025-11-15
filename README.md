@@ -11,3 +11,16 @@ Berkeley's Algorithm is a clock synchronization algorithm.
 3. The leader observes the round-trip time (RTT) of the messages and estimates the time of each node and its own.
 4. The leader averages the clock times, ignoring values far outside a certain threshold.
 5. The leader sends out the amount (positive or negative) each node must adjust its clock with. 
+
+
+### Usage:
+
+Using Makefile:
+
+    make all
+    make run
+
+Using mpi:
+
+    mpicc main.c -Wall -o main.out
+    mpirun -np <no_threads> --oversubscribe main.out 
