@@ -1,6 +1,6 @@
 # Berkeley's Algorithm for clock synchronization
 
-The Accuracy of the Clock Synchronization Achieved by TEMPO in Berkeley UNIX 4.3BSD - Riccardo Gusella, Stefano Zatti can be found [here](https://www.cs.ubc.ca/~bestchai/teaching/cs538b_2014w2/clock-synch-in-tempo.pdf).
+The Accuracy of the Clock Synchronization Achieved by TEMPO in Berkeley UNIX 4.3BSD - Riccardo Gusella, Stefano Zatti can be found [here](https://www2.eecs.berkeley.edu/Pubs/TechRpts/1987/CSD-87-337.pdf).
 
 Berkeley's Algorithm is a clock synchronization algorithm.
 
