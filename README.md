@@ -24,3 +24,17 @@ Using mpi:
 
     mpicc main.c -Wall -o main.out
     mpirun -np <no_threads> --oversubscribe main.out 
+
+### Output
+
+    mpirun -np 4 main.out
+    pid: 1: my counter is : 81
+    pid: 3: my counter is : 65
+    pid: 0: my counter is : 77
+    pid: 2: my counter is : 71
+    LEADER: computed average is 4
+    LEADER: my clock is now: 81
+    pid 2: my adjusted clock is: 81
+    pid 0: my adjusted clock is: 81
+    pid 1: my adjusted clock is: 81
+    pid 3: my adjusted clock is: 81
