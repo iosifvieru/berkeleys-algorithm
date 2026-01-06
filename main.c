@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define LEADER 0
+#define LEADER 2
 
 int main(int argc, char** argv){
     MPI_Init(&argc, &argv);
 
     int my_pid, world_size;
-    long current_clock = clock(); // clock time.
+    double my_clock = MPI_Wtime();
     
     MPI_Status status;
     MPI_Request request;
@@ -23,11 +23,12 @@ int main(int argc, char** argv){
         exit(EXIT_FAILURE);
     }
 
-    printf("pid: %d my clock is : %ld\n", my_pid, current_clock);
+    printf("pid: %d my clock is : %lf\n", my_pid, my_clock);
 
-    long* recvbuf;
+    // berkeley's clock synchronization algorithm
+    double* recvbuf;
     if(my_pid == LEADER){
-        recvbuf = (long*) malloc (world_size * sizeof(long));
+        recvbuf = (double*) malloc (world_size * sizeof(double));
         
         if(recvbuf == NULL){
             fprintf(stderr, "Unable to allocate memory for recvbuf.\n");
@@ -35,38 +36,41 @@ int main(int argc, char** argv){
             exit(EXIT_FAILURE);
         }
     }
+    
+    my_clock = MPI_Wtime();
+    MPI_Gather(&my_clock, 1, MPI_DOUBLE, recvbuf, 1, MPI_DOUBLE, LEADER, MPI_COMM_WORLD);
 
-    current_clock = clock();
-    MPI_Gather(&current_clock, 1, MPI_LONG, recvbuf, 1, MPI_LONG, LEADER, MPI_COMM_WORLD);
-
-    int adjustment = 0;
-    long leader_final_clock = 0;
+    double adjustment = 0;
+    double leader_final_clock = 0;
 
     if(my_pid == LEADER){
-        long sum_differences = 0;
+        double sum_differences = 0;
 
         for(int i = 0; i < world_size; i++){
             if(i == LEADER) { continue; }
 
-            sum_differences += clock() - recvbuf[i];
+            sum_differences += my_clock - recvbuf[i];
         }
 
-        long avg_offset = (long) (sum_differences / (world_size - 1));
-        printf("LEADER: computed average is %d\n", avg_offset);
+        double avg_offset = (sum_differences / (world_size - 1));
+        printf("LEADER: computed average is %lf\n", avg_offset);
 
-        leader_final_clock = clock() + avg_offset;
-        printf("LEADER: my clock is now: %d\n", leader_final_clock);
+        leader_final_clock = my_clock + avg_offset;
 
         free(recvbuf);
         recvbuf = NULL; 
     }
 
-    MPI_Bcast(&leader_final_clock, 1, MPI_LONG, LEADER, MPI_COMM_WORLD);
+    MPI_Bcast(&leader_final_clock, 1, MPI_DOUBLE, LEADER, MPI_COMM_WORLD);
 
-    adjustment = leader_final_clock - clock();
+    adjustment = leader_final_clock - MPI_Wtime();
 
-    printf("pid %d: my adjustment is: %ld\n", my_pid, adjustment);
-    printf("pid %d: my adjusted clock is: %ld\n", my_pid, clock() + adjustment);
+    if(my_pid != LEADER){
+        printf("pid %d: my adjustment is: %lf\n", my_pid, adjustment);
+        printf("pid %d: my adjusted clock is: %lf\n", my_pid, MPI_Wtime() + adjustment);
+    } else {
+        printf("pid: %d (LEADER): my adjusted clock is: %lf\n", my_pid, MPI_Wtime() + adjustment);        
+    }
 
     MPI_Finalize();
     return 0;
