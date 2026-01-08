@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <time.h>
 
 #define TAG_ELECTION 1
@@ -34,7 +35,7 @@ int main(int argc, char** argv){
     // leader election - LCR
     srand(time(NULL) + my_pid);
 
-    int uuid = rand() % 1000;
+    int uuid = (rand() % 1000) * 100 + my_pid;
     int recv_uuid = 0;
     int leader_id = 0;
     int max_uuid = uuid;
@@ -82,21 +83,40 @@ int main(int argc, char** argv){
     }
     
     my_clock = MPI_Wtime();
+
+    // add artificial delay
+    if(rand() % 10 < 2){
+        double random_drift = (rand() % 10000) / 1000.0;
+        my_clock += random_drift;
+        printf("pid: %d I got random drift: %lf, my clock now: %lf\n", my_pid, random_drift, my_clock);
+    }
+
     MPI_Gather(&my_clock, 1, MPI_DOUBLE, recvbuf, 1, MPI_DOUBLE, leader_id, MPI_COMM_WORLD);
 
     double adjustment = 0;
     double leader_final_clock = 0;
+
+    double maximum_drift = 1.0;
+    int no_excluded_nodes = 0;
 
     if(my_pid == leader_id){
         double sum_differences = 0;
 
         for(int i = 0; i < world_size; i++){
             if(i == leader_id) { continue; }
+            
+            double node_drift = my_clock - recvbuf[i];
+            // exclude nodes with high drift from the average sum
+            if(fabs(node_drift) > maximum_drift) {
+                printf("LEADER: pid %d is excluded due to high clock drift: %lf\n", i, node_drift);
+                no_excluded_nodes++;
+                continue;
+            }
 
-            sum_differences += my_clock - recvbuf[i];
+            sum_differences += node_drift;
         }
 
-        double avg_offset = (sum_differences / (world_size - 1));
+        double avg_offset = sum_differences / (world_size - no_excluded_nodes);
         printf("LEADER: computed average is %lf\n", avg_offset);
 
         leader_final_clock = my_clock + avg_offset;
