@@ -28,44 +28,49 @@ Using mpi:
 ### Output
 
     mpirun -np 8 --oversubscribe main.out
-    pid: 3 my clock is : 0.576005
-    pid: 3, my UUID: 846
-    pid: 2 my clock is : 0.578270
-    pid: 2, my UUID: 566
-    pid: 4 my clock is : 0.577952
-    pid: 4, my UUID: 505
-    pid: 0 my clock is : 0.578752
-    pid: 5 my clock is : 0.576265
-    pid: 5, my UUID: 215
-    pid: 7 my clock is : 0.575147
-    pid: 7, my UUID: 454
-    pid: 0, my UUID: 128
-    pid: 1 my clock is : 0.574886
-    pid: 1, my UUID: 198
-    pid: 6 my clock is : 0.573728
-    pid: 6, my UUID: 326
-    PID 3 won the election with the value: 846!!!
-    pid: 3, my max_uuid is 846, my leader_id = 3
-    pid: 4, my max_uuid is 846, my leader_id = 3
-    pid: 6, my max_uuid is 846, my leader_id = 3
-    pid: 5, my max_uuid is 846, my leader_id = 3
-    pid: 7, my max_uuid is 846, my leader_id = 3
-    pid: 2, my max_uuid is 846, my leader_id = 3
-    pid: 0, my max_uuid is 846, my leader_id = 3
-    pid: 1, my max_uuid is 846, my leader_id = 3
-    LEADER: computed average is -0.000348
-    pid: 3 (LEADER): my adjusted clock is: 0.577159
-    pid 0: my adjustment is: -0.003793
-    pid 0: my adjusted clock is: 0.577164
-    pid 4: my adjustment is: -0.003006
-    pid 4: my adjusted clock is: 0.577165
-    pid 2: my adjustment is: -0.003368
-    pid 2: my adjusted clock is: 0.577164
-    pid 6: my adjustment is: 0.001336
-    pid 6: my adjusted clock is: 0.577163
-    pid 7: my adjustment is: -0.000432
-    pid 7: my adjusted clock is: 0.577164
-    pid 5: my adjustment is: -0.001558
-    pid 5: my adjusted clock is: 0.577164
-    pid 1: my adjustment is: -0.000173
-    pid 1: my adjusted clock is: 0.577165
+    pid: 7 my clock is : 0.559591
+    pid: 7, my UUID: 3507
+    pid: 5 my clock is : 0.560775
+    pid: 5, my UUID: 21305
+    pid: 1 my clock is : 0.561513
+    pid: 1, my UUID: 90601
+    pid: 0 my clock is : 0.561882
+    pid: 0, my UUID: 5900
+    pid: 4 my clock is : 0.561940
+    pid: 4, my UUID: 62404
+    pid: 6 my clock is : 0.561513
+    pid: 6, my UUID: 38806
+    pid: 3 my clock is : 0.561855
+    pid: 3, my UUID: 58803
+    pid: 2 my clock is : 0.562063
+    pid: 2, my UUID: 57902
+    PID 1 won the election with the value: 90601!!!
+    pid: 3 I got random drift: 1.926000, my clock now: 0.563507
+    pid: 5 I got random drift: 5.653000, my clock now: 0.562484
+    pid: 0 I got random drift: 7.574000, my clock now: 0.563577
+    LEADER: calcualted RTT time for node: 0 is 0.000009
+    LEADER: calcualted RTT time for node: 2 is 0.000001
+    LEADER: calcualted RTT time for node: 3 is 0.001463
+    LEADER: calcualted RTT time for node: 4 is 0.000011
+    LEADER: calcualted RTT time for node: 5 is 0.000011
+    LEADER: calcualted RTT time for node: 6 is 0.000010
+    LEADER: calcualted RTT time for node: 7 is 0.000007
+    LEADER: pid 0 is excluded due to high clock drift: 7.574384
+    LEADER: pid 3 is excluded due to high clock drift: 1.928513
+    LEADER: pid 5 is excluded due to high clock drift: 5.653804
+    LEADER: computed average is 0.000696
+    pid: 1 (LEADER): my adjusted clock is: 0.563900
+    pid 2: my adjustment is: -0.001787
+    pid 2: my adjusted clock is: 0.563908
+    pid 6: my adjustment is: -0.001354
+    pid 6: my adjusted clock is: 0.563908
+    pid 0: my adjustment is: -7.575762
+    pid 0: my adjusted clock is: 0.563908
+    pid 4: my adjustment is: -0.001785
+    pid 4: my adjusted clock is: 0.563908
+    pid 5: my adjustment is: -5.653733
+    pid 5: my adjusted clock is: 0.563907
+    pid 3: my adjustment is: -1.927762
+    pid 3: my adjusted clock is: 0.563908
+    pid 7: my adjustment is: 0.000429
+    pid 7: my adjusted clock is: 0.563909
